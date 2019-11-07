@@ -60,7 +60,7 @@ def get_naver_news_list_from_page(base_url, date, page, deduplicate=True):
 def main():
 	# set variable
 	base_url = 'https://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=001'
-	KST = datetime.utcnow() + timedelta(hours=0)
+	KST = datetime.utcnow() + timedelta(hours=9)
 	date = KST.strftime('%Y%m%d') # form: 20191107
 	num_of_pages = 30
 	max_n_of_top = 10
