@@ -1,9 +1,5 @@
 #!/usr/bin/python3
 
-# TODO ---------------------------------
-#		add more common word
-# --------------------------------------
-
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
