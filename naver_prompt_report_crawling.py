@@ -52,19 +52,31 @@ def get_naver_news_list_from_page(base_url, date, page, deduplicate=True):
 
 	return title_list
 
+def get_naver_last_page(base_url, date, page):
+	url = base_url + '&date=' + date + '&page=' + str(page)
+	html = urlopen(url)
+	soup = BeautifulSoup(html, "html.parser")
+	pages = soup.find(id='main_content').find('div', {'class': 'paging'}).findAll()
+	try:
+		last = int(pages[-1].text)
+	except ValueError: # if has next page
+		last = 10000
+	return last
+
 
 def main():
 	# set variable
 	base_url = 'https://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=001'
 	KST = datetime.utcnow() + timedelta(hours=9)
 	date = KST.strftime('%Y%m%d') # form: 20191107
-	num_of_pages = 30
+	num_of_pages = 20
 	max_n_of_top = 10
 	common_word = {'첫', '등', '벌써', '오늘'}
 
 	# get title from naver page
 	news_title_list = []
-	for page in range(num_of_pages):
+	last_page = get_naver_last_page(base_url, date, 10000)
+	for page in range(min(num_of_pages, last_page)):
 		news_title_list += get_naver_news_list_from_page(base_url, date, page+1, deduplicate=True)
 
 	# counting keywords
