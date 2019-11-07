@@ -8,15 +8,18 @@ from datetime import datetime, timedelta
 
 def refine_string(full_str):
 	refined_str = full_str
-	refined_str = re.sub('[,\."\'\-_~!…’‘]+', ' ', refined_str)
+	refined_str = re.sub('[,\."\'\-_~!…’‘·\[\]\(\)]+', ' ', refined_str)
 	return refined_str
 
 
-def extract_keyword_from_string_list(str_list):
+def extract_keyword_from_string_list(str_list, refinement=True):
 	keyword_count = dict()
 	for each_str in str_list:
-		refined_str = refine_string(each_str)
-		keywords = refined_str.split()
+		if (refinement):
+			refined_str = refine_string(each_str)
+			keywords = refined_str.split()
+		else:
+			keywords = each_str.split()
 		for each in keywords:
 			try:
 				keyword_count[each] += 1
@@ -80,7 +83,7 @@ def main():
 		news_title_list += get_naver_news_list_from_page(base_url, date, page+1, deduplicate=True)
 
 	# counting keywords
-	keyword_table = extract_keyword_from_string_list(news_title_list)
+	keyword_table = extract_keyword_from_string_list(news_title_list, refinement=True)
 	sorted_keywords_table = sorted(keyword_table.items(), key=lambda kv: kv[1], reverse=True)
 
 	# print result
